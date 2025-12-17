@@ -60,9 +60,9 @@ def get_part1_solution(number_lists, operators):
                 result *= n
             results.append(result)
         else:
-            logger.error(f"Unknown operator: {op}")
+            logger.error(msg=f"Unknown operator: {op}")
             continue
-        logger.debug(f"Operation {op} on {nums} gives result {result}")
+        logger.debug(msg=f"Operation {op} on {nums} gives result {result}")
     return sum(results)
 
 def get_part2_solution(parsed_data):
