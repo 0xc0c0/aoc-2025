@@ -33,10 +33,15 @@ def test_parse_input(test_data):
     Args:
         test_data (str): takes in a raw text str object as a data blob
     """
-    data = parse_data(test_data)
-    assert len(data) == 10
-    assert data[0][0] == 'L'
-    assert data[0][1] == 68
+    ranges, ingredients = parse_data(test_data)
+    
+    assert len(ranges) == 4
+    assert ranges[0][0] == 3
+    assert ranges[3][1] == 18
+
+    assert len(ingredients) == 6
+    assert ingredients[0] == 1
+    assert ingredients[5] == 32
 
 
 def test_all(test_data):
@@ -45,6 +50,6 @@ def test_all(test_data):
     Args:
         test_data (str): takes in a raw text str object as a data blob
     """
-    data = parse_data(test_data)
-    assert get_part1_solution(data) == 3
-    assert get_part2_solution(data) == 6
+    ranges, ingredients = parse_data(test_data)
+    assert get_part1_solution(ranges, ingredients) == 3
+    assert get_part2_solution(ranges) == 14
