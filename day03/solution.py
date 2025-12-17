@@ -19,11 +19,11 @@ def parse_data(text_data):
 
 def get_part1_solution(parsed_data):
     """Complete Part 1 solution here"""
-    return None
+    return parsed_data
 
 def get_part2_solution(parsed_data):
     """Complete Part 2 solution here"""
-    return None
+    return parsed_data
 
 def print_answer(answer, part=1):
     """Print the answer in a standard format."""
