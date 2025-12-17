@@ -1,7 +1,7 @@
 """Python test file for unit testing in support of AoC solves"""
 import os
 import pytest
-from .solution import parse_data, get_file_data, get_part1_solution
+from .solution import parse_data, get_file_data, get_part1_solution, get_part2_solution
 
 
 @pytest.fixture(name="test_data")
@@ -12,9 +12,7 @@ def get_test_data_1():
         str: data blob of text from file
     """
     test_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "test.txt")
-    with open(test_file, "r", encoding="utf-8") as f:
-        text = f.read()
-    return text
+    return get_file_data(test_file)
 
 
 # @pytest.fixture(name="test_data2")
@@ -51,3 +49,4 @@ def test_all(test_data):
     """
     data = parse_data(test_data)
     assert get_part1_solution(data) == 3
+    assert get_part2_solution(data) == 6

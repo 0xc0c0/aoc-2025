@@ -33,26 +33,37 @@ def get_part1_solution(rotation_cmds):
 def get_part2_solution(rotation_cmds):
     """Complete Part 2 solution here"""
     rotations = []
-    for dir, dist in rotation_cmds:
-        if dir == 'L':
+    for d, dist in rotation_cmds:
+        if d == 'L':
             rotations.append(-dist)
         else:
             rotations.append(dist)
 
     dial = 50
     total_hits = 0
-    for r in rotations:    
-        #check for beyond zero
+    for r in rotations:
+        #reduce r down to within 100
+        total_hits += abs(r) // 100
+        if r < 0:
+            r = -(-r % 100)
+        else:
+            r = r % 100
+
+        #get new dial position
         new_dial = (dial + r) % 100
+        logger.debug(msg=f"{dial}, {r}, {new_dial}")
         # handle 0 crossing when negative
         # handle 0 crossing when positive
         zero_crossings = abs((dial + r) // 100)
         if dial == 0:
             zero_crossings -= 1
         if zero_crossings > 0:
+            logger.debug(msg=f"  zero crossings: {zero_crossings}")
             total_hits += zero_crossings
-        if new_dial == 0:
+        if new_dial == 0 and r < 0:
+            logger.debug(msg="  landed on zero going left!")
             total_hits += 1
+        
         dial = new_dial
     return total_hits
 
@@ -65,6 +76,7 @@ def print_answer(answer, part=1):
         print(f"Part {part} Answer: {answer}")
 
 def main():
+    """Main function to run the solution."""
     data = get_file_data()
     rotation_cmds = parse_data(data)
     answer = get_part1_solution(rotation_cmds)
