@@ -34,9 +34,11 @@ def test_parse_input(test_data):
         test_data (str): takes in a raw text str object as a data blob
     """
     data = parse_data(test_data)
-    assert len(data) == 10
-    assert data[0][0] == 'L'
-    assert data[0][1] == 68
+    assert len(data) == 3
+    assert data[0]['objective'] == 6
+    assert data[0]['buttons'][0] == 8
+    assert data[0]['buttons'][1] == 10
+    assert len(data[0]['joltages']) == 4
 
 
 def test_all(test_data):
@@ -46,5 +48,5 @@ def test_all(test_data):
         test_data (str): takes in a raw text str object as a data blob
     """
     data = parse_data(test_data)
-    assert get_part1_solution(data) == 3
-    assert get_part2_solution(data) == 6
+    assert get_part1_solution(data) == 7
+    # assert get_part2_solution(data) == 6
