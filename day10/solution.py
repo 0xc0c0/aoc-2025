@@ -55,9 +55,81 @@ def get_part1_solution(parsed_data):
         total_min_presses += min_presses
     return total_min_presses
 
+def get_binary_from_int(value):
+    """Convert an integer to its binary representation."""
+    return bin(value)[2:]
+
+def convert_to_different_numeric_base(value, base=10):
+    """Convert a binary number to a different base."""
+    bits = [int(x) for x in list(bin(value)[2:])]
+    bits.reverse()
+    return sum([base ** i * v for i, v in enumerate(bits)])
+
+## BFS version, too slow   
+# def get_part2_solution(parsed_data):
+#     """Complete Part 2 solution here"""
+#     total_min_presses = 0
+#     for i, entry in enumerate(parsed_data):
+#         buttons = entry['buttons']
+#         joltages = entry['joltages']
+#         # continue to treat offset as sort of bitmask for easier computation
+#         # each place has more possible values than just 1 or 0, but we can still use the same logic
+#         # to compute the minimum number of presses required
+#         numeric_base = max(joltages)
+#         target_joltage = sum([numeric_base ** i * v for i, v in enumerate(joltages)])
+#         buttons = [convert_to_different_numeric_base(b, numeric_base) for b in buttons]
+#         next_values = list(buttons)
+#         min_presses = {b: 1 for b in buttons}
+#         current_presses = 1
+#         while target_joltage not in min_presses:
+#             current_values = list(next_values)
+#             next_values = []
+#             for v in current_values:
+#                 for b in buttons:
+#                     next_v = v + b
+#                     if next_v not in min_presses and next_v <= target_joltage:
+#                         min_presses[next_v] = current_presses + 1
+#                         next_values.append(next_v)
+#             current_presses += 1
+
+#         logger.debug(msg=f"entry {i} :: target {target_joltage} :: min_presses {min_presses[target_joltage]}")
+#         total_min_presses += min_presses[target_joltage]
+#     return total_min_presses
+
+def dfs(remaining, min_presses, buttons):
+    """Depth-first search to find the minimum number of presses required."""
+    if remaining == 0:
+        return 0
+    if remaining < 0:
+        return float('inf')
+    if remaining in min_presses:
+        return min_presses[remaining]
+
+    min_count = float('inf')
+    for b in buttons:
+        count = dfs(remaining - b, min_presses, buttons)
+        if count != float('inf'):
+            min_count = min(min_count, count + 1)
+    min_presses[remaining] = min_count
+    return min_count
+
 def get_part2_solution(parsed_data):
     """Complete Part 2 solution here"""
-    return None
+    total_min_presses = 0
+    for i, entry in enumerate(parsed_data):
+        buttons = entry['buttons']
+        joltages = entry['joltages']
+        # continue to treat offset as sort of bitmask for easier computation
+        # each place has more possible values than just 1 or 0, but we can still use the same logic
+        # to compute the minimum number of presses required
+        numeric_base = max(joltages)
+        target_joltage = sum([numeric_base ** i * v for i, v in enumerate(joltages)])
+        buttons = [convert_to_different_numeric_base(b, numeric_base) for b in buttons]
+        min_presses = {}
+        min_presses[target_joltage] = dfs(target_joltage, min_presses, buttons)
+        logger.debug(msg=f"entry {i} :: target {target_joltage} :: min_presses {min_presses[target_joltage]}")
+        total_min_presses += min_presses[target_joltage]
+    return total_min_presses
 
 def print_answer(answer, part=1):
     """Print the answer in a standard format."""

@@ -49,4 +49,4 @@ def test_all(test_data):
     """
     data = parse_data(test_data)
     assert get_part1_solution(data) == 7
-    # assert get_part2_solution(data) == 6
+    assert get_part2_solution(data) == 33
