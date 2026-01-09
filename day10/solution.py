@@ -107,6 +107,8 @@ def dfs(remaining, min_presses, buttons):
 
     min_count = float('inf')
     for b in buttons:
+        if remaining % b == 0:
+            count = dfs(remaining // b, min_presses, buttons) * remaining // b
         count = dfs(remaining - b, min_presses, buttons)
         if count != float('inf'):
             min_count = min(min_count, count + 1)
